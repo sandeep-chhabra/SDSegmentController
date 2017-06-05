@@ -1,0 +1,6 @@
+framework module SDSegmentController {
+  umbrella header "SDSegmentController-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,16 @@
+PODS:
+  - SDSegmentController (0.1.0)
+
+DEPENDENCIES:
+  - SDSegmentController (from `../`)
+
+EXTERNAL SOURCES:
+  SDSegmentController:
+    :path: ../
+
+SPEC CHECKSUMS:
+  SDSegmentController: 6ddff7d6575664fe8be6c19625b62f62c6257478
+
+PODFILE CHECKSUM: 7cefdc841b73c852d8a2fcdcbb98a760014308cb
+
+COCOAPODS: 1.2.1
