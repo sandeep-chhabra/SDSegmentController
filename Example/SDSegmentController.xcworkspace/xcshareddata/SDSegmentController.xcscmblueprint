@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "8499E075E75CD04ACAB45F8571CEE11E2A230AEA",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "E9A16D928194FD5DF7F768DE48F1E0D3A2428EDE" : 9223372036854775807,
+    "8499E075E75CD04ACAB45F8571CEE11E2A230AEA" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "97C2A58E-CBAF-4C7D-9E72-85B8426B7DE4",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "E9A16D928194FD5DF7F768DE48F1E0D3A2428EDE" : "",
+    "8499E075E75CD04ACAB45F8571CEE11E2A230AEA" : "SDSegmentController\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "SDSegmentController",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Example\/SDSegmentController.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/sandeep-chhabra\/SDSegmentController.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8499E075E75CD04ACAB45F8571CEE11E2A230AEA"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/sandeep-chhabra\/SDSegmentController.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E9A16D928194FD5DF7F768DE48F1E0D3A2428EDE"
+    }
+  ]
+}

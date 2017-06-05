@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		26DAF0B8651E11A238A09A9FC75624F3 /* Pods-SDSegmentController_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E956C3A74D1D5780EDF32DB61CFAF2 /* Pods-SDSegmentController_Example-dummy.m */; };
+		4A423F7D1EE59530004AA7ED /* SDSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A423F7B1EE59530004AA7ED /* SDSegmentControl.swift */; };
+		4A423F7E1EE59530004AA7ED /* SDSegmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A423F7C1EE59530004AA7ED /* SDSegmentViewController.swift */; };
 		4CBA8832203672A03969DD37BAAEFB4A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
-		5BEAE9F8589809F2A152435B3A4D9DDD /* ReplaceMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0B2A4A6DFC6ED5BCDDC54AB5669F63 /* ReplaceMe.swift */; };
 		68B074017AA50B2BF8D5037C1E09A04A /* SDSegmentController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 951308B1B05B00E778DB010ABF32ADC3 /* SDSegmentController-dummy.m */; };
 		8A0E4FC1148BA01C7844435BF07C6283 /* Pods-SDSegmentController_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CAD679CD5BB42DD982748DDA4B52B423 /* Pods-SDSegmentController_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9FA517EA95863DC7450ADE0890B8502F /* Pods-SDSegmentController_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 09672E5733F58B32F220203DC605C9E7 /* Pods-SDSegmentController_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -33,35 +34,36 @@
 		0105F28A636920CEA1413F1036AF068F /* Pods-SDSegmentController_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SDSegmentController_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		01CA128E49D23320CD788B4B704A1B87 /* SDSegmentController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SDSegmentController-prefix.pch"; sourceTree = "<group>"; };
 		08EA0C6C2E4220AB15B191E3BC136953 /* Pods-SDSegmentController_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SDSegmentController_Tests-resources.sh"; sourceTree = "<group>"; };
-		09415D4C83258140CA3B9CEBD7F0244B /* Pods-SDSegmentController_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-SDSegmentController_Tests.modulemap"; sourceTree = "<group>"; };
+		09415D4C83258140CA3B9CEBD7F0244B /* Pods-SDSegmentController_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-SDSegmentController_Tests.modulemap"; sourceTree = "<group>"; };
 		09672E5733F58B32F220203DC605C9E7 /* Pods-SDSegmentController_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SDSegmentController_Example-umbrella.h"; sourceTree = "<group>"; };
-		0E772D83DDC564EBC75463F98DF0869B /* Pods_SDSegmentController_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_SDSegmentController_Tests.framework; path = "Pods-SDSegmentController_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0E772D83DDC564EBC75463F98DF0869B /* Pods_SDSegmentController_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SDSegmentController_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FA715990BFB5B1B2EE1077952C32F7F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1D0B2A4A6DFC6ED5BCDDC54AB5669F63 /* ReplaceMe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReplaceMe.swift; sourceTree = "<group>"; };
 		2FF09FC94CAC890054B954F4AC6BB533 /* SDSegmentController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SDSegmentController-umbrella.h"; sourceTree = "<group>"; };
 		307AE83B71D81B327BAA3A7C7D9A7636 /* Pods-SDSegmentController_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SDSegmentController_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		36E956C3A74D1D5780EDF32DB61CFAF2 /* Pods-SDSegmentController_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SDSegmentController_Example-dummy.m"; sourceTree = "<group>"; };
 		3896C4F7D81420A3CD62851F8CE4F2CF /* Pods-SDSegmentController_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SDSegmentController_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		4A423F7B1EE59530004AA7ED /* SDSegmentControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDSegmentControl.swift; sourceTree = "<group>"; };
+		4A423F7C1EE59530004AA7ED /* SDSegmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDSegmentViewController.swift; sourceTree = "<group>"; };
 		4F8BFE7C0FAE9A7C875FD177BE2390CE /* Pods-SDSegmentController_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SDSegmentController_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		59BC481915B341A7617A92B33694D9D3 /* SDSegmentController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SDSegmentController.xcconfig; sourceTree = "<group>"; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		6ECB444C84B6DA34670F21D088229D14 /* Pods-SDSegmentController_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SDSegmentController_Tests-frameworks.sh"; sourceTree = "<group>"; };
 		84DDE942BA481DB78A26D7FB170AFAAC /* Pods-SDSegmentController_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SDSegmentController_Example.release.xcconfig"; sourceTree = "<group>"; };
 		89EC2B0DC9AFC3FCE55F124C08CC6A17 /* Pods-SDSegmentController_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SDSegmentController_Example-frameworks.sh"; sourceTree = "<group>"; };
-		8D6233EF394197CBAA17E32FAB2211F4 /* SDSegmentController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SDSegmentController.framework; path = SDSegmentController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		8D6233EF394197CBAA17E32FAB2211F4 /* SDSegmentController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDSegmentController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		951308B1B05B00E778DB010ABF32ADC3 /* SDSegmentController-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SDSegmentController-dummy.m"; sourceTree = "<group>"; };
 		A09AFE334181A24EB96EB24410AC3784 /* Pods-SDSegmentController_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SDSegmentController_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		A0A31B008FAE0C87E6A5F99900B30076 /* Pods-SDSegmentController_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SDSegmentController_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		AD754B2694BAD159E8261912F9C28CCB /* SDSegmentController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = SDSegmentController.modulemap; sourceTree = "<group>"; };
+		AD754B2694BAD159E8261912F9C28CCB /* SDSegmentController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = SDSegmentController.modulemap; sourceTree = "<group>"; };
 		B5651F112468E0AB9C0A07CD4F97DB68 /* Pods-SDSegmentController_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SDSegmentController_Example-resources.sh"; sourceTree = "<group>"; };
 		BD1F417870168F2C09A67EE0E66B1252 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C229C33C0F93EFB60D7934B2549698B2 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CAD679CD5BB42DD982748DDA4B52B423 /* Pods-SDSegmentController_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SDSegmentController_Tests-umbrella.h"; sourceTree = "<group>"; };
 		CCFAA5011B7810EA9273832BA76DCB85 /* Pods-SDSegmentController_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SDSegmentController_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		DE190EA8A5563DE33A61DAE224305026 /* Pods-SDSegmentController_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SDSegmentController_Tests-dummy.m"; sourceTree = "<group>"; };
-		F02B7A4EFC8EC5E56D30AD208AC0E7E8 /* Pods-SDSegmentController_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-SDSegmentController_Example.modulemap"; sourceTree = "<group>"; };
-		FE6789324984EEDC3988D207C5BCA74C /* Pods_SDSegmentController_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_SDSegmentController_Example.framework; path = "Pods-SDSegmentController_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F02B7A4EFC8EC5E56D30AD208AC0E7E8 /* Pods-SDSegmentController_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-SDSegmentController_Example.modulemap"; sourceTree = "<group>"; };
+		FE6789324984EEDC3988D207C5BCA74C /* Pods_SDSegmentController_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SDSegmentController_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,9 +111,9 @@
 		100499DCDF6CFA01D4092AADB7C868B6 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				1D0B2A4A6DFC6ED5BCDDC54AB5669F63 /* ReplaceMe.swift */,
+				4A423F7B1EE59530004AA7ED /* SDSegmentControl.swift */,
+				4A423F7C1EE59530004AA7ED /* SDSegmentViewController.swift */,
 			);
-			name = Classes;
 			path = Classes;
 			sourceTree = "<group>";
 		};
@@ -202,7 +204,6 @@
 			children = (
 				100499DCDF6CFA01D4092AADB7C868B6 /* Classes */,
 			);
-			name = SDSegmentController;
 			path = SDSegmentController;
 			sourceTree = "<group>";
 		};
@@ -314,6 +315,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0700;
+				TargetAttributes = {
+					554B4EB631CD01A98BC19E278450109B = {
+						LastSwiftMigration = 0820;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -339,7 +345,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BEAE9F8589809F2A152435B3A4D9DDD /* ReplaceMe.swift in Sources */,
 				68B074017AA50B2BF8D5037C1E09A04A /* SDSegmentController-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,6 +353,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A423F7E1EE59530004AA7ED /* SDSegmentViewController.swift in Sources */,
+				4A423F7D1EE59530004AA7ED /* SDSegmentControl.swift in Sources */,
 				26DAF0B8651E11A238A09A9FC75624F3 /* Pods-SDSegmentController_Example-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,6 +431,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CCFAA5011B7810EA9273832BA76DCB85 /* Pods-SDSegmentController_Example.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -463,6 +471,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 84DDE942BA481DB78A26D7FB170AFAAC /* Pods-SDSegmentController_Example.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
