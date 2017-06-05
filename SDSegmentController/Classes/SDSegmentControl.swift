@@ -15,30 +15,30 @@
 
 import UIKit
 
-enum SDSegmentWidth {
+public enum SDSegmentWidth {
     case dynamic
     case fixed
 }
 
-enum SDSegmentControlType{
+public enum SDSegmentControlType{
     case text
     case image
     case imageText
 
 }
-enum SDMoveDirection{
+public enum SDMoveDirection{
     case forward
     case backward
 }
-class SDSegmentControl: UIControl {
+public class SDSegmentControl: UIControl {
 
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
 //        NSLog("awwake from nib")
     }
     
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
+    override public func draw(_ rect: CGRect) {
         // Drawing code
 //        NSLog("draw rect " )
 
@@ -49,10 +49,10 @@ class SDSegmentControl: UIControl {
  
 
     //set these values accordingly if using default init or to change segments at runtime
-    var _sectionTitles:[String]?
-    var _sectionImages:[UIImage]?
-    var _selectedSectionImages:[UIImage]?
-    var _controlType:SDSegmentControlType = .text
+    public var _sectionTitles:[String]?
+    public var _sectionImages:[UIImage]?
+    public var _selectedSectionImages:[UIImage]?
+    public var _controlType:SDSegmentControlType = .text
     
     private var _scrollView:UIScrollView!
     private var _selectionIndicator : UIView
@@ -61,21 +61,21 @@ class SDSegmentControl: UIControl {
     private var _currentProgress : CGFloat = 0
     private var _currentDirection : SDMoveDirection = .forward
     
-    var selectionIndicatorHeight :CGFloat = 4
-    var segmentWidthStyle : SDSegmentWidth = .fixed
+    public var selectionIndicatorHeight :CGFloat = 4
+    public var segmentWidthStyle : SDSegmentWidth = .fixed
     
-    var selectionIndicatorColor:UIColor =  UIColor.init(red: 84/255, green: 182/255, blue: 74/255, alpha: 1)
-    var sectionColor:UIColor = UIColor.white
+    public var selectionIndicatorColor:UIColor =  UIColor.init(red: 84/255, green: 182/255, blue: 74/255, alpha: 1)
+    public var sectionColor:UIColor = UIColor.white
     
-    var titleTextAttributes : [String: AnyObject]
-    var selectedTitleTextAttributes : [String: AnyObject]
-    var selectedSectionIndex : Int = 0
-    var lastSelectedSectionIndex :Int = 0
+    public var titleTextAttributes : [String: AnyObject]
+    public var selectedTitleTextAttributes : [String: AnyObject]
+    public var selectedSectionIndex : Int = 0
+    public var lastSelectedSectionIndex :Int = 0
     
     
-    var sectionMargin:CGFloat = 0
+    public var sectionMargin:CGFloat = 0
 
-    var numberOfSegments : Int {
+    public var numberOfSegments : Int {
         get{
             var count = 0
             
@@ -94,7 +94,7 @@ class SDSegmentControl: UIControl {
         }
     }
 
-    var moveDirection : SDMoveDirection {
+   public var moveDirection : SDMoveDirection {
         get{
             return lastSelectedSectionIndex > selectedSectionIndex ? .backward : .forward
         }
@@ -102,7 +102,7 @@ class SDSegmentControl: UIControl {
     
     //MARK: - Initialization
     
-    init(){
+   public init(){
         sectionMargin = 10
         _scrollView = UIScrollView()
         _selectionIndicator = UIView()
@@ -114,13 +114,13 @@ class SDSegmentControl: UIControl {
         super.init(frame: CGRect())
     }
     
-    convenience  init(sectionTitles:[String]){
+    convenience public init(sectionTitles:[String]){
         self.init()
         _sectionTitles = sectionTitles
         _controlType = .text
     }
     
-    convenience init(sectionImages:[UIImage],selectedSectionImages:[UIImage]) {
+    convenience public init(sectionImages:[UIImage],selectedSectionImages:[UIImage]) {
         self.init()
 
         _sectionImages = sectionImages
@@ -128,7 +128,7 @@ class SDSegmentControl: UIControl {
         _controlType = .image
     }
     
-    convenience init(sectionImages:[UIImage],selectedSectionImages:[UIImage],sectionTitles:[String]) {
+    convenience public init(sectionImages:[UIImage],selectedSectionImages:[UIImage],sectionTitles:[String]) {
         self.init()
         _sectionImages = sectionImages
         _selectedSectionImages = selectedSectionImages
@@ -136,7 +136,7 @@ class SDSegmentControl: UIControl {
         _controlType = .imageText
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         
 //        NSLog("init coder")
         sectionMargin = 10
@@ -170,7 +170,7 @@ class SDSegmentControl: UIControl {
 //    }
     
     // MARK: - Draw segments
-    func drawSegments(){
+  public  func drawSegments(){
         
         NSLog("draw segments")
         _scrollView.removeFromSuperview()
@@ -339,7 +339,7 @@ class SDSegmentControl: UIControl {
     }
     
     
-    func selectSegment(segmentbButton:UIButton?,index:Int?)  {
+  public  func selectSegment(segmentbButton:UIButton?,index:Int?)  {
         
         selectSegment(segmentbButton: segmentbButton, index: index, shouldSendAction: false)
     }
@@ -389,18 +389,18 @@ class SDSegmentControl: UIControl {
             }
     }
   //MARK: - Refresh
-    func refreshSegemts() {
+ public   func refreshSegemts() {
         self.setNeedsDisplay()
     }
     
 //MARK: - Drag to next
     
-    func beginMoveToNextSegment(){
+  public  func beginMoveToNextSegment(){
         
         //disable touch
     }
     
-    func endMoveToNextSegment(){
+  public  func endMoveToNextSegment(){
         
         switch (selectedSectionIndex,_currentDirection) {
         case (0, .backward):
@@ -425,7 +425,7 @@ class SDSegmentControl: UIControl {
         //enable touch
     }
     
-    func setProgressToNextSegment(progress:CGFloat , direction : SDMoveDirection){
+  public  func setProgressToNextSegment(progress:CGFloat , direction : SDMoveDirection){
         
         
         _currentDirection = direction

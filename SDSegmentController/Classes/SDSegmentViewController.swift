@@ -1,5 +1,5 @@
 //
-//  SDSegmentViewController.swift
+//  SDSegmentController.swift
 //  SDSegmentController
 //
 //  Created by Sandeep Chhabra on 29/05/17.
@@ -8,51 +8,51 @@
 
 import UIKit
 
-protocol SDSegmentViewControllerDataSource {
+public protocol SDSegmentControllerDataSource {
     func viewControllerAt(segmentIndex:Int) -> UIViewController
 }
 
 
-class SDSegmentViewController: UIViewController ,SDSegmentPageViewControllerDelegate, UIPageViewControllerDataSource{
+public class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDelegate, UIPageViewControllerDataSource{
     
-    var dataSource: SDSegmentViewControllerDataSource!
+    public var dataSource: SDSegmentControllerDataSource!
 
     
-    var  segmentControl : SDSegmentControl!
-    var segmentHeight : CGFloat = 50
+   public var  segmentControl : SDSegmentControl!
+   public var segmentHeight : CGFloat = 50
     
     private  let _pageController:SDSegmentPageViewController = SDSegmentPageViewController.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     
 //    private var _lastSelectedSegmentIndex = 0
     
-    init(){
+    public init(){
         segmentControl = SDSegmentControl()
         super.init(nibName: nil, bundle: nil)
     }
     
-    convenience  init(sectionTitles:[String]){
+    convenience public init(sectionTitles:[String]){
         self.init()
         segmentControl = SDSegmentControl(sectionTitles: sectionTitles)
     }
     
-    convenience init(sectionImages:[UIImage],selectedSectionImages:[UIImage]) {
+    convenience public init(sectionImages:[UIImage],selectedSectionImages:[UIImage]) {
         self.init()
         segmentControl = SDSegmentControl(sectionImages: sectionImages, selectedSectionImages: selectedSectionImages)
     }
     
-    convenience init(sectionImages:[UIImage],selectedSectionImages:[UIImage],sectionTitles:[String]) {
+    convenience public init(sectionImages:[UIImage],selectedSectionImages:[UIImage],sectionTitles:[String]) {
         self.init()
         segmentControl = SDSegmentControl(sectionImages: sectionImages, selectedSectionImages: selectedSectionImages, sectionTitles: sectionTitles)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         segmentControl = SDSegmentControl()
         super.init(coder:aDecoder)
 //        fatalError("init(coder:) has not been implemented")
     }
     
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         _pageController.delegate = self
@@ -63,7 +63,7 @@ class SDSegmentViewController: UIViewController ,SDSegmentPageViewControllerDele
         
     }
 
-    override func didReceiveMemoryWarning() {
+    override public func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
@@ -85,7 +85,7 @@ class SDSegmentViewController: UIViewController ,SDSegmentPageViewControllerDele
 
     
 //MARK: - UIPageViewControllerDataSource
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+  public  func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if (viewController.view.tag == 0) {
             return nil;
         }
@@ -93,7 +93,7 @@ class SDSegmentViewController: UIViewController ,SDSegmentPageViewControllerDele
     }
     
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+   public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         if (viewController.view.tag == segmentControl.numberOfSegments - 1) {
             return nil;
         }
@@ -111,11 +111,11 @@ class SDSegmentViewController: UIViewController ,SDSegmentPageViewControllerDele
     
 //MARK: - UIPageViewControllerDelegate
     
-    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+  public  func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
 
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+  public  func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed{
             let index = pageViewController.viewControllers?[0].view.tag ;
             if (index! < segmentControl.numberOfSegments) {
@@ -131,7 +131,7 @@ class SDSegmentViewController: UIViewController ,SDSegmentPageViewControllerDele
     
     
 //MARK: - Add segments
-    func addSegments() {
+   public func addSegments() {
    
         //Add segment control
         segmentControl.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: segmentHeight)
@@ -164,7 +164,7 @@ class SDSegmentViewController: UIViewController ,SDSegmentPageViewControllerDele
         
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
             var frame =  self.segmentControl.frame
             frame.size.width = size.width
             self.segmentControl.frame = frame
