@@ -36,7 +36,7 @@ class ViewController: UIViewController,SDSegmentControllerDataSource {
         get{ return true}
     }
     
-    //MARK: - SDSegmentViewControllerDataSource
+    //MARK: - SDSegmentControllerDataSource
     func viewControllerAt(segmentIndex: Int) -> UIViewController {
         let vc = UIViewController()
         
