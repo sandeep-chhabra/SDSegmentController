@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'SDSegmentController_Example' do
+  pod 'SDSegmentController', :path => '../'
+
+  target 'SDSegmentController_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
