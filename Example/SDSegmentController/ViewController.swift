@@ -24,7 +24,6 @@ class ViewController: UIViewController,SDSegmentControllerDataSource {
         segmentVc.dataSource = self
         segmentVc.addSegments()
         
-        //        UIApplication.shared.setStatusBarHidden(true, with: .none)
         
     }
     
