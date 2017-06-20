@@ -354,7 +354,6 @@ public class SDSegmentControl: UIControl {
             let attrStr = self.attributedTitleAt(index: index)
             let image  = _sectionImages?[index]
             return max(attrStr.size().width, (image?.size.width)!)
-            break
         case .text:
                 let attrStr = self.attributedTitleAt(index: index)
                 return  attrStr.size().width
