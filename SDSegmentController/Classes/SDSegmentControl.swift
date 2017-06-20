@@ -30,6 +30,25 @@ public enum SDMoveDirection{
     case forward
     case backward
 }
+
+
+fileprivate extension UIButton {
+    func centerVeticallyWith(padding:CGFloat){
+        if let imageSize = self.imageView?.frame.size, let titleSize = self.titleLabel?.frame.size {
+            let totalHeight = imageSize.height + titleSize.height + padding
+            
+            self.imageEdgeInsets = UIEdgeInsets(top: -(totalHeight - imageSize.height), left: titleSize.width, bottom: 0, right: 0)
+            self.titleEdgeInsets = UIEdgeInsets(top: 0, left: -imageSize.width, bottom: -(totalHeight - titleSize.height), right: 0)
+            self.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
+    }
+    
+    func centerVertically() {
+        centerVeticallyWith(padding:7)
+    }
+}
+
+
 public class SDSegmentControl: UIControl {
 
     override public func awakeFromNib() {
@@ -84,6 +103,7 @@ public class SDSegmentControl: UIControl {
                 count = (_sectionImages?.count)!
                 break
             case .imageText:
+                count = (_sectionTitles?.count)!
                 break
             case .text:
                 count = (_sectionTitles?.count)!
@@ -212,6 +232,17 @@ public class SDSegmentControl: UIControl {
                 button.setImage(_selectedSectionImages?[index], for: .selected)
                 break
             case .imageText:
+                button.setImage(_sectionImages?[index], for: .normal)
+                button.setImage(_selectedSectionImages?[index], for: .selected)
+                
+                let attrTitle = NSAttributedString(string: (_sectionTitles?[index])!, attributes: titleTextAttributes)
+                let attrTitleSelected = NSAttributedString(string: (_sectionTitles?[index])!, attributes: selectedTitleTextAttributes)
+                
+                button.setAttributedTitle(attrTitle, for: .normal)
+                button.setAttributedTitle(attrTitleSelected, for: .selected)
+                
+                button.centerVertically()
+                
                 break
             case .text:
                 let attrTitle = NSAttributedString(string: (_sectionTitles?[index])!, attributes: titleTextAttributes)
@@ -260,7 +291,7 @@ public class SDSegmentControl: UIControl {
         return NSAttributedString.init(string: title!, attributes: textAtt)
     }
     
-    
+//NOT USED
     func sizeForSegmentAt(index:Int) -> CGSize {
 
         let isSelectedIndex : Bool = (selectedSectionIndex == index)
@@ -276,7 +307,7 @@ public class SDSegmentControl: UIControl {
             
         }
     }
-    
+//
     func maxWidth() -> CGFloat  {
         
         var maxWidth:CGFloat = 0
@@ -320,6 +351,9 @@ public class SDSegmentControl: UIControl {
                 let image  = _sectionImages?[index]
                 return image!.size.width
         case .imageText:
+            let attrStr = self.attributedTitleAt(index: index)
+            let image  = _sectionImages?[index]
+            return max(attrStr.size().width, (image?.size.width)!)
             break
         case .text:
                 let attrStr = self.attributedTitleAt(index: index)

@@ -15,12 +15,14 @@ class ViewController: UIViewController,SDSegmentControllerDataSource {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let segmentVc = SDSegmentController.init(sectionTitles: ["Title 1","1","Title 2","2","Title 3","3","Title 4","4"])
+        let segmentVc = SDSegmentController.init(sectionImages: [#imageLiteral(resourceName: "music"),#imageLiteral(resourceName: "home"),#imageLiteral(resourceName: "book"),#imageLiteral(resourceName: "books")], selectedSectionImages: [#imageLiteral(resourceName: "musicSelected"),#imageLiteral(resourceName: "homeSelected"),#imageLiteral(resourceName: "bookSelected"),#imageLiteral(resourceName: "booksSelected")], sectionTitles: ["Title 1","Title 2","Title 3","Title 4"] )
+        
         segmentVc.view.frame = self.view.bounds
+        segmentVc.segmentHeight = 80
+        segmentVc.segmentControl.segmentWidthStyle = .dynamic
         self.addChildViewController(segmentVc)
         self.view.addSubview(segmentVc.view)
         
-        segmentVc.segmentControl.segmentWidthStyle = .dynamic
         segmentVc.dataSource = self
         segmentVc.addSegments()
         
