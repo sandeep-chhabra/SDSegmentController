@@ -359,7 +359,6 @@ public class SDSegmentControl: UIControl {
                 return  attrStr.size().width
         }
         
-        return 0
     }
     
     
