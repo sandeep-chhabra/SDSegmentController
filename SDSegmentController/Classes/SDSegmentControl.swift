@@ -8,7 +8,6 @@
 
 
 
-//TODO : ImageTextType
 //TODO : ERROR HANDLING FOR WRONG OR NOT INPUT
 //TODO: HANDLING FOR IMAGE SIZE BIGGER THAN OWN SIZE
 
@@ -34,37 +33,78 @@ public enum SDMoveDirection{
 
 fileprivate extension UIButton {
     func centerVeticallyWith(padding:CGFloat){
-        if let imageSize = self.imageView?.frame.size, let titleSize = self.titleLabel?.frame.size {
-            let totalHeight = imageSize.height + titleSize.height + padding
-            
-            self.imageEdgeInsets = UIEdgeInsets(top: -(totalHeight - imageSize.height), left: titleSize.width, bottom: 0, right: 0)
-            self.titleEdgeInsets = UIEdgeInsets(top: 0, left: -imageSize.width, bottom: -(totalHeight - titleSize.height), right: 0)
-            self.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        }
+        guard let imageSize = self.imageView?.image?.size,
+            let text = self.titleLabel?.text,
+            let font = self.titleLabel?.font
+            else { return }
+        
+        self.titleEdgeInsets = UIEdgeInsets(top: 0.0, left: -imageSize.width, bottom: -(imageSize.height + padding), right: 0.0)
+        let labelString = NSString(string: text)
+        let titleSize = labelString.size(attributes: [NSFontAttributeName: font])
+        
+        self.imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + padding), left: 0.0, bottom: 0.0, right: -titleSize.width)
+        
+        let edgeOffset = abs(titleSize.height - imageSize.height) / 2.0;
+        self.contentEdgeInsets = UIEdgeInsets(top: edgeOffset, left: 0.0, bottom: edgeOffset, right: 0.0)
     }
     
     func centerVertically() {
-        centerVeticallyWith(padding:7)
+        centerVeticallyWith(padding:5)
+    }
+    
+}
+
+public class SDButton:UIButton{
+    override public var isSelected: Bool{
+        set (val){
+            super.isSelected = val
+            centerVertically()
+        }
+        get{
+            return super.isSelected
+        }
+    }
+    
+}
+
+fileprivate extension UIImage{
+    func resizeImage( newHeight: CGFloat) -> UIImage {
+        let scale = newHeight / self.size.height
+        let newWidth = self.size.width * scale
+        UIGraphicsBeginImageContext(CGSize.init(width: newWidth, height: newHeight))
+        self.draw(in: CGRect.init(x: 0, y: 0, width: newWidth, height: newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+    }
+    
+    func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
+        let scale = newWidth / image.size.width
+        let newHeight = image.size.height * scale
+        UIGraphicsBeginImageContext(CGSize.init(width: newWidth, height: newHeight))
+        image.draw(in: CGRect.init(x: 0, y: 0, width: newWidth, height: newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
     }
 }
 
 
-public class SDSegmentControl: UIControl {
+public protocol SDSegmentControlDelegate {
+    //delegate method called aways even when user selects segment
+    func segmentControl(segmentControl:SDSegmentControl, willSelectSegmentAt index:Int)
+    func segmentControl(segmentControl:SDSegmentControl, didSelectSegmentAt index:Int)
+    
+}
 
-    override public func awakeFromNib() {
+open class SDSegmentControl: UIControl {
+
+    override open func awakeFromNib() {
 //        NSLog("awwake from nib")
     }
     
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override public func draw(_ rect: CGRect) {
-        // Drawing code
-//        NSLog("draw rect " )
+    public var delegate: SDSegmentControlDelegate?
 
-        DispatchQueue.main.async {
-            self.drawSegments()
-        }
-    }
  
 
     //set these values accordingly if using default init or to change segments at runtime
@@ -158,7 +198,6 @@ public class SDSegmentControl: UIControl {
     
     required public init?(coder aDecoder: NSCoder) {
         
-//        NSLog("init coder")
         sectionMargin = 10
         _scrollView = UIScrollView()
         _selectionIndicator = UIView()
@@ -168,29 +207,13 @@ public class SDSegmentControl: UIControl {
         selectedTitleTextAttributes = [NSForegroundColorAttributeName : UIColor.init(red: 84/255, green: 182/255, blue: 74/255, alpha: 1), NSFontAttributeName : UIFont.systemFont(ofSize: 18)]
 
         super.init(coder : aDecoder)
-//        fatalError("init(coder:) has not been implemented")
     }
     
 
-    //
-//    
-//    func setSelectedSegment(index:Int,animated:Bool)  {
-//        
-//        switch _controlType {
-//        case .image:
-//            
-//        break
-//        case .imageText:
-//            break
-//        case .text:
-//            break
-//            
-//        }
-//        
-//    }
+
     
     // MARK: - Draw segments
-  public  func drawSegments(){
+  open  func drawSegments(){
         
         NSLog("draw segments")
         _scrollView.removeFromSuperview()
@@ -208,7 +231,9 @@ public class SDSegmentControl: UIControl {
         _scrollView.backgroundColor = sectionColor
         self.backgroundColor = UIColor.gray
         
-        
+    
+        rescaleImagesIfNeeded()
+    
         //Add sections
         let maxWidth = self.maxWidth()
         var x:CGFloat = 0  //sectionMargin
@@ -217,7 +242,7 @@ public class SDSegmentControl: UIControl {
         for index in 0...count-1 {
             let btnWidth = ( segmentWidthStyle == .fixed ?  maxWidth :  widthAt(index: index)) + sectionMargin
             let rect = CGRect(x: x, y: CGFloat(0), width: btnWidth ,height: self.frame.size.height - selectionIndicatorHeight )
-            let button = UIButton(frame:rect )
+            let button = SDButton(frame:rect )
             button.addTarget(self, action: #selector(sectionSlected(button:)), for: UIControlEvents.touchUpInside)
             
             button.tag = index + 999
@@ -228,12 +253,25 @@ public class SDSegmentControl: UIControl {
             
             switch _controlType {
             case .image:
-                button.setImage(_sectionImages?[index], for: .normal)
-                button.setImage(_selectedSectionImages?[index], for: .selected)
+                if var image = _sectionImages?[index] {
+                    let height = image.size.height
+                    if height > self.frame.size.height{
+                     image = image.resizeImage( newHeight: self.frame.size.height)
+                    }
+                    button.setImage(image, for: .normal)
+
+                }
+                if var selectedImage = _selectedSectionImages?[index] {
+                    let height = selectedImage.size.height
+                    if height > self.frame.size.height{
+                        selectedImage = selectedImage.resizeImage( newHeight: self.frame.size.height)
+                    }
+                    button.setImage(selectedImage, for: .selected)
+                }
+                
                 break
             case .imageText:
-                button.setImage(_sectionImages?[index], for: .normal)
-                button.setImage(_selectedSectionImages?[index], for: .selected)
+                
                 
                 let attrTitle = NSAttributedString(string: (_sectionTitles?[index])!, attributes: titleTextAttributes)
                 let attrTitleSelected = NSAttributedString(string: (_sectionTitles?[index])!, attributes: selectedTitleTextAttributes)
@@ -241,8 +279,12 @@ public class SDSegmentControl: UIControl {
                 button.setAttributedTitle(attrTitle, for: .normal)
                 button.setAttributedTitle(attrTitleSelected, for: .selected)
                 
+                button.setImage(_sectionImages?[index], for: .normal)
+                button.setImage(_selectedSectionImages?[index], for: .selected)
+
+                //call after setting image and text
                 button.centerVertically()
-                
+
                 break
             case .text:
                 let attrTitle = NSAttributedString(string: (_sectionTitles?[index])!, attributes: titleTextAttributes)
@@ -283,7 +325,67 @@ public class SDSegmentControl: UIControl {
         _scrollView.scrollRectToVisible(selectedView.frame, animated: true)
     }
     
+    
+    func rescaleImagesIfNeeded(){
+        
+        if _controlType != .imageText && _controlType != .image {
+            return
+        }
+        
+        let padding : CGFloat = 5
+        let topInset : CGFloat = 7
+        let bottomInset : CGFloat = 7
+
+        for index in 0..<numberOfSegments{
+            
+            var titleHeight : CGFloat = 0
+            var selectedTitleHeight : CGFloat = 0
+
+            
+            if _controlType == .imageText {
+                let attrTitle = NSAttributedString(string: (_sectionTitles?[index])!, attributes: titleTextAttributes)
+                let attrTitleSelected = NSAttributedString(string: (_sectionTitles?[index])!, attributes: selectedTitleTextAttributes)
+                
+                titleHeight = attrTitle.size().height + padding
+                selectedTitleHeight = attrTitleSelected.size().height + padding
+            }
+           
+            
+            if let image = _sectionImages?[index] , let selectedImage = _selectedSectionImages?[index] {
+                
+                
+                //Match heights of images and selected images by taking min so that chances of rescaling are reduced in next step
+                let minHeight = min(image.size.height, selectedImage.size.height)
+                if image.size.height != selectedImage.size.height {
+                    if image.size.height > selectedImage.size.height{
+                        _sectionImages?[index] = image.resizeImage( newHeight: minHeight)
+                    }
+                    else{
+                        _selectedSectionImages?[index] = selectedImage.resizeImage( newHeight: minHeight)
+                    }
+                }
+                
+                
+                //rescale section images if they do not fit in button
+                let totalHeight = minHeight + titleHeight + topInset + bottomInset
+                let totalSelectedHeight = minHeight + selectedTitleHeight + topInset + bottomInset
+                
+                if totalHeight > self.frame.size.height{
+                    _sectionImages?[index] = image.resizeImage( newHeight: self.frame.size.height - titleHeight - topInset - bottomInset)
+                }
+                
+                if totalSelectedHeight > self.frame.size.height{
+                    _selectedSectionImages?[index] = selectedImage.resizeImage( newHeight: self.frame.size.height - selectedTitleHeight - topInset - bottomInset)
+                }
+            }
+            
+        }
+        
+    }
+    
+    
     //MARK: Drawing helpers
+  
     func attributedTitleAt(index:Int) -> NSAttributedString {
         let title = _sectionTitles?[index]
         let textAtt = selectedSectionIndex == index ? selectedTitleTextAttributes : titleTextAttributes
@@ -291,42 +393,10 @@ public class SDSegmentControl: UIControl {
         return NSAttributedString.init(string: title!, attributes: textAtt)
     }
     
-//NOT USED
-    func sizeForSegmentAt(index:Int) -> CGSize {
 
-        let isSelectedIndex : Bool = (selectedSectionIndex == index)
-        switch _controlType {
-        case .image:
-            let image = isSelectedIndex ? _selectedSectionImages?[index] : _sectionImages?[index]
-                return image!.size
-        case .imageText:
-            return CGSize()
-        case .text:
-            let title = self.attributedTitleAt(index: index)
-            return title.size()
-            
-        }
-    }
-//
     func maxWidth() -> CGFloat  {
         
         var maxWidth:CGFloat = 0
-        
-//        switch _controlType {
-//        case .image:
-//            for item in arr{
-//                let image  = item as! UIImage
-//                maxWidth = maxWidth < image.size.width ? image.size.width : maxWidth
-//            }
-//            break
-//        case .imageText:
-//            break
-//        case .text:
-//            for i in 0...arr.count - 1{
-//                let attrStr = self.attributedTitleAt(index: i)
-//                maxWidth = maxWidth < attrStr.size().width ? attrStr.size().width : maxWidth
-//            }
-//        }
         
         let count = numberOfSegments
        
@@ -344,25 +414,26 @@ public class SDSegmentControl: UIControl {
     }
  
     func widthAt(index:Int) -> CGFloat  {
-        
-        
         switch _controlType {
         case .image:
-                let image  = _sectionImages?[index]
-                return image!.size.width
+            let image  = _sectionImages?[index]
+            return image!.size.width
         case .imageText:
             let attrStr = self.attributedTitleAt(index: index)
-            let image  = _sectionImages?[index]
-            return max(attrStr.size().width, (image?.size.width)!)
+            let image  = _sectionImages![index]
+            let selectedImage = _selectedSectionImages![index]
+            return max(attrStr.size().width,image.size.width, selectedImage.size.width)
         case .text:
-                let attrStr = self.attributedTitleAt(index: index)
-                return  attrStr.size().width
+            let attrStr = self.attributedTitleAt(index: index)
+            return  attrStr.size().width
         }
         
     }
     
     
-    
+  public  func viewAt(segmentIndex:Int) -> UIView? {
+        return self.viewWithTag(segmentIndex+999)
+    }
   
     //MARK: - Action for sections tap
     func sectionSlected(button:UIButton) {
@@ -371,7 +442,7 @@ public class SDSegmentControl: UIControl {
     }
     
     
-  public  func selectSegment(segmentbButton:UIButton?,index:Int?)  {
+  open  func selectSegment(segmentbButton:UIButton?,index:Int?)  {
         
         selectSegment(segmentbButton: segmentbButton, index: index, shouldSendAction: false)
     }
@@ -398,7 +469,8 @@ public class SDSegmentControl: UIControl {
             self.selectedSectionIndex = currentSectionIndex
         }
        
-        
+        //delegate method called always even when user selects segment
+        self.delegate?.segmentControl(segmentControl: self, willSelectSegmentAt: currentSectionIndex)
         if shouldSendAction {
             self.sendActions(for: .valueChanged)
         }
@@ -418,21 +490,24 @@ public class SDSegmentControl: UIControl {
                         let lastSelectedView = self._scrollView.viewWithTag(self.lastSelectedSectionIndex+999) as! UIButton
                         lastSelectedView.isSelected = false
                     }
+                //delegate method called always even when user selects segment
+                self.delegate?.segmentControl(segmentControl: self, didSelectSegmentAt: currentSectionIndex)
             }
     }
   //MARK: - Refresh
- public   func refreshSegemts() {
-        self.setNeedsDisplay()
+ open   func refreshSegemts() {
+//        self.setNeedsDisplay()
+    self.drawSegments()
     }
     
 //MARK: - Drag to next
     
-  public  func beginMoveToNextSegment(){
+  open  func beginMoveToNextSegment(){
         
         //disable touch
     }
     
-  public  func endMoveToNextSegment(){
+  open  func endMoveToNextSegment(){
         
         switch (selectedSectionIndex,_currentDirection) {
         case (0, .backward):
@@ -457,7 +532,7 @@ public class SDSegmentControl: UIControl {
         //enable touch
     }
     
-  public  func setProgressToNextSegment(progress:CGFloat , direction : SDMoveDirection){
+  open  func setProgressToNextSegment(progress:CGFloat , direction : SDMoveDirection){
         
         
         _currentDirection = direction

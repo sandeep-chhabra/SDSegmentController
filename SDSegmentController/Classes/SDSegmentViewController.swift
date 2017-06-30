@@ -12,10 +12,17 @@ public protocol SDSegmentControllerDataSource {
     func viewControllerAt(segmentIndex:Int) -> UIViewController
 }
 
+public protocol SDSegmentControllerDelegate {
+    //delegate method called always even when user selects segment
+    func segmentController(segmentController:SDSegmentController, willSelectSegmentAt index:Int)
+    func segmentController(segmentController:SDSegmentController, didSelectSegmentAt index:Int)
 
-public class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDelegate, UIPageViewControllerDataSource{
+}
+
+open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDelegate, UIPageViewControllerDataSource , SDSegmentControlDelegate{
     
     public var dataSource: SDSegmentControllerDataSource!
+    public var delegate: SDSegmentControllerDelegate?
 
     
    public var  segmentControl : SDSegmentControl!
@@ -28,6 +35,7 @@ public class SDSegmentController: UIViewController ,SDSegmentPageViewControllerD
     public init(){
         segmentControl = SDSegmentControl()
         super.init(nibName: nil, bundle: nil)
+        segmentControl.delegate = self
     }
     
     convenience public init(sectionTitles:[String]){
@@ -48,11 +56,11 @@ public class SDSegmentController: UIViewController ,SDSegmentPageViewControllerD
     required public init?(coder aDecoder: NSCoder) {
         segmentControl = SDSegmentControl()
         super.init(coder:aDecoder)
-//        fatalError("init(coder:) has not been implemented")
+        segmentControl.delegate = self
     }
     
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         _pageController.delegate = self
@@ -63,12 +71,14 @@ public class SDSegmentController: UIViewController ,SDSegmentPageViewControllerD
         
     }
 
-    override public func didReceiveMemoryWarning() {
+    override open func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    
+    public  func viewAt(segmentIndex:Int) -> UIView? {
+        return self.segmentControl.viewAt(segmentIndex: segmentIndex)
+    }
 
 //MARK: - SDSegmentPageViewControllerDelegate
     func segmentDidBeginDragging(offset: CGPoint) {
@@ -111,7 +121,7 @@ public class SDSegmentController: UIViewController ,SDSegmentPageViewControllerD
     
 //MARK: - UIPageViewControllerDelegate
     
-  public  func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+    public func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
 
     }
     
@@ -131,13 +141,13 @@ public class SDSegmentController: UIViewController ,SDSegmentPageViewControllerD
     
     
 //MARK: - Add segments
-   public func addSegments() {
+   open func addSegments() {
    
         //Add segment control
         segmentControl.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: segmentHeight)
         self.view.addSubview(segmentControl)
         segmentControl.drawSegments()
-        
+    
         //add pageController
         _pageController.view.frame = CGRect(x: 0, y: segmentHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - segmentHeight)
         self.addChildViewController(_pageController)
@@ -151,7 +161,7 @@ public class SDSegmentController: UIViewController ,SDSegmentPageViewControllerD
     }
 
     
-//MARK : -SEGMENT CONTROL
+//MARK : - SEGMENT CONTROL
     func segmentControlValueChanged(segment:SDSegmentControl)  {
         let dir : UIPageViewControllerNavigationDirection = segmentControl.moveDirection == .forward ? .forward : .reverse
        
@@ -163,8 +173,16 @@ public class SDSegmentController: UIViewController ,SDSegmentPageViewControllerD
         
         
     }
-    
-    override public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+//MARK : - SDSegmentControlDelegate
+    public func segmentControl(segmentControl: SDSegmentControl, didSelectSegmentAt index: Int) {
+        delegate?.segmentController(segmentController: self, didSelectSegmentAt: index)
+    }
+    public func segmentControl(segmentControl: SDSegmentControl, willSelectSegmentAt index: Int) {
+        delegate?.segmentController(segmentController: self, willSelectSegmentAt: index)
+    }
+  
+//MARK - Handle rotation
+    override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
             var frame =  self.segmentControl.frame
             frame.size.width = size.width
             self.segmentControl.frame = frame
