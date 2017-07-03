@@ -600,19 +600,16 @@ open class SDSegmentControl: UIControl {
         
         _selectionIndicator.frame =  CGRect(x:x , y: y, width:width, height:selectionIndicatorHeight)
         
-//        switch direction {
-//        case .forward:
-//            let x = currentFrame.origin.x  + (nxtFrame.size.width * _currentProgress)
-//            _selectionIndicator.frame = CGRect(x:x , y: _selectionIndicator.frame.origin.y, width:nxtFrame.size.width * (segmentWidthStyle == .fixed ? 1 : _currentProgress), height:selectionIndicatorHeight)
-//            break
-//        default:
-//            let x = currentFrame.origin.x  - (nxtFrame.size.width * _currentProgress)
-//            NSLog("backx = \(x)")
-//            _selectionIndicator.frame = CGRect(x:x , y: _selectionIndicator.frame.origin.y, width:nxtFrame.size.width * (segmentWidthStyle == .fixed ? 1 : _currentProgress), height:selectionIndicatorHeight)
-//            
-//            break
-//        }
+
     }
+   
     
+    open func selectNextSegment(){
+        selectSegment(segmentbButton: nil, index: selectedSectionIndex + 1)
+    }
+    open func selectPrevSegment(){
+        selectSegment(segmentbButton: nil, index: selectedSectionIndex - 1)
+    }
+
     
 }
