@@ -11,7 +11,7 @@ import UIKit
 public protocol SDSegmentControllerDataSource {
     func viewControllerAt(segmentIndex:Int) -> UIViewController
 }
-//TODO: Add deselect delegate, fix swipe issue 
+
 public protocol SDSegmentControllerDelegate {
     //delegate method called always even when user selects segment
     func segmentController(segmentController:SDSegmentController, willSelectSegmentAt index:Int)
@@ -93,20 +93,6 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
 //        _lastSelectedSegmentIndex = segmentControl.selectedSectionIndex
     }
 
-    func segmentDidChangePage(direction: UISwipeGestureRecognizerDirection) {
-        switch direction {
-        case UISwipeGestureRecognizerDirection.left:
-            self.segmentControl.selectNextSegment()
-            break
-        case UISwipeGestureRecognizerDirection.right:
-            self.segmentControl.selectPrevSegment()
-            break
-        default:
-            break
-        }
-        
-    }
-    
     
 //MARK: - UIPageViewControllerDataSource
   public  func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -143,7 +129,7 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
         if completed{
             let index = pageViewController.viewControllers?[0].view.tag ;
             if (index! < segmentControl.numberOfSegments) {
-//                self.segmentControl.selectSegment(segmentbButton: nil, index:index)
+                self.segmentControl.selectSegment(segmentbButton: nil, index:index)
 //                _lastSelectedSegmentIndex = index!;
             }
             else{
@@ -152,6 +138,7 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
         }
         
     }
+    
     
 //MARK: - Add segments
    open func addSegments() {
@@ -206,10 +193,9 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
 
 
 @objc protocol SDSegmentPageViewControllerDelegate:UIPageViewControllerDelegate {
-    @objc optional func segmentDidBeginDragging(offset:CGPoint)
+ @objc optional func segmentDidBeginDragging(offset:CGPoint)
     //TODO: SEND current section index - bug - page view controller allows to drag to mutiple view controllers at a single time
-    @objc optional func segmentDidEndDragging()
-    @objc optional func segmentDidChangePage(direction:UISwipeGestureRecognizerDirection)
+ @objc optional func segmentDidEndDragging()
 
 }
 
@@ -217,8 +203,8 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
 class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDelegate{
  
     private   var _panGest : UIPanGestureRecognizer!
+//    private   var _swipeGest : UISwipeGestureRecognizer!
     
-    private var isSwipe = false
     
     var scrollDelegate:SDSegmentPageViewControllerDelegate?
 
@@ -231,14 +217,7 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
         _panGest = scrollVu?.panGestureRecognizer
         _panGest.addTarget(self, action: #selector(handlePan(panGest:)))
         
-        let rightSwipeGest = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipeGest:)))
-        rightSwipeGest.delegate = self
-        self.view.addGestureRecognizer(rightSwipeGest)
-        
-        let leftSwipeGest = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipeGest:)))
-        leftSwipeGest.delegate = self
-        leftSwipeGest.direction = UISwipeGestureRecognizerDirection.left
-        self.view.addGestureRecognizer(leftSwipeGest)
+//        _swipeGest = scrollVu.
     }
     
     override func didReceiveMemoryWarning() {
@@ -247,42 +226,14 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
     }
     
     
-    func handleSwipe(swipeGest:UISwipeGestureRecognizer)  {
-        switch swipeGest.state {
-        case .began:
-            print("swipe gest began")
-            
-            break
-        case .possible:
-            print("swipe gest possible")
-            
-            break
-        case .ended:
-            print("swipe gest ended")
-            isSwipe = true
-            scrollDelegate?.segmentDidChangePage?(direction: swipeGest.direction)
-            break
-        default:
-            break
-        }
-
-    }
-    
     func handlePan(panGest:UIPanGestureRecognizer)  {
         
         switch panGest.state {
         case .began,.changed:
-            if !isSwipe {
-                print("Pan gest began")
             scrollDelegate?.segmentDidBeginDragging?(offset: panGest.translation(in: self.view))
-            }
         break
         case .ended:
-            if !isSwipe {
-                print("Pan gest ended")
-                scrollDelegate?.segmentDidEndDragging?()
-            }
-            isSwipe = false
+            scrollDelegate?.segmentDidEndDragging?()
         break
         default:
             break
@@ -302,10 +253,5 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
         }
         
         return nil
-    }
-    
-    //MARK: - UIGestureRecognizerDelegate
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
     }
 }
