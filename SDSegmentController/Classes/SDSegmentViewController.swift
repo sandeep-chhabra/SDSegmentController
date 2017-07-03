@@ -129,7 +129,7 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
         if completed{
             let index = pageViewController.viewControllers?[0].view.tag ;
             if (index! < segmentControl.numberOfSegments) {
-                self.segmentControl.selectSegment(segmentbButton: nil, index:index)
+//                self.segmentControl.selectSegment(segmentbButton: nil, index:index)
 //                _lastSelectedSegmentIndex = index!;
             }
             else{
@@ -200,11 +200,13 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
 }
 
 
-class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDelegate{
+class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDelegate, UIScrollViewDelegate{
  
     private   var _panGest : UIPanGestureRecognizer!
 //    private   var _swipeGest : UISwipeGestureRecognizer!
     
+    var previousPage : Int = 1
+    var endDrag = false
     
     var scrollDelegate:SDSegmentPageViewControllerDelegate?
 
@@ -214,10 +216,11 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
         
         let scrollVu = self.getScrollView(mainView: self.view)
        
-        _panGest = scrollVu?.panGestureRecognizer
-        _panGest.addTarget(self, action: #selector(handlePan(panGest:)))
+//        _panGest = scrollVu?.panGestureRecognizer
+//        _panGest.addTarget(self, action: #selector(handlePan(panGest:)))
         
-//        _swipeGest = scrollVu.
+        scrollVu?.delegate = self
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -241,8 +244,96 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
 
     }
     
+//MARK: - UIScrollViewDelegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
 
+        
+
+        
+        
+        //On every the page on scroll view
+        //scrollview content offset x starts from pagewidth to 2*pagewidth in case of forward
+        //content offset x changes from pagewidth to 0 in case of backward
+        //Then reset
+        if endDrag{
+            
+            return
+        }
+        
+        let pageWidth : CGFloat = scrollView.frame.size.width
+        let fractionalPage = scrollView.contentOffset.x / pageWidth
+        let progress = abs(1 - fractionalPage)
+
+        let dir:SDMoveDirection = fractionalPage >= 1 ? .forward : .backward
+        print("scrollViewDidScroll PROGRESS: \(progress), previous:\(previousPage), direction:\(dir)")
+
+     //TODO : REMOVE endDrag TO HANDLE DEACCELERATION
+        
+   //TEMP
+        let x = CGFloat(progress)  * pageWidth * (dir == .backward ? 1 : -1)
+        let temp = CGPoint(x: x, y: 0)
+        scrollDelegate?.segmentDidBeginDragging?(offset:temp)
+  //TODO:NEED TO CHECK
+//    TO FIX ISSUE OF MULTIPLE PAGE DRAGS AT SINGLE TIME
+        //ALTERNATIVE TRY - pan gesture number of touches to 1 to disable
+        
+//        print("scrollViewDidScroll : \((scrollView.contentOffset.x * CGFloat(previousPage))/pageWidth)")
+//
+//        let totalProg = (scrollView.contentOffset.x * CGFloat(previousPage))/pageWidth
+//        let pageNumber = trunc(totalProg)
+//        let targetPage = dir == .forward ? pageNumber + 1 : pageNumber
+//        let prog = totalProg - pageNumber
+//        
+//        print("scrollViewDidScroll : \(targetPage), progress:\(prog), direction:\(dir) ")
+
+        
+    }
     
+   
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        print("scrollViewDidEndDecelerating")
+        endDrag = false
+
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
+        print("scrollViewWillEndDragging")
+        
+        endDrag = true
+        
+        let pageWidth : CGFloat = scrollView.frame.size.width;
+        let fractionalPage = scrollView.contentOffset.x / pageWidth;
+        
+        if fractionalPage > 1.5{
+            //did move to next page
+            previousPage += 1
+        }
+        else if fractionalPage < 0.5 && previousPage != 1{
+            //Did move to previous page
+            previousPage -= 1
+        }
+        
+        scrollDelegate?.segmentDidEndDragging?()
+
+    }
+//    
+//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+////        print("scrollViewDidEndDragging")
+//        
+//       
+//    }
+//    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+//        print("scrollViewWillBeginDragging")
+//        
+//    }
+//    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+//        print("scrollViewDidEndScrollingAnimation")
+//        scrollDelegate?.segmentDidEndDragging?()
+//    }
+    
+    //---------------
     func getScrollView(mainView:UIView) -> UIScrollView! {
         for view in mainView.subviews {
             if let vu = view as? UIScrollView{
