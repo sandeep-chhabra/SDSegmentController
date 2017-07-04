@@ -515,6 +515,7 @@ open class SDSegmentControl: UIControl {
         case (numberOfSegments - 1,.forward):
             return
         default:
+            print("Default case endMoveToNextSegment \(selectedSectionIndex), \(_currentDirection), \(_currentProgress)")
             break
         }
         
@@ -548,8 +549,7 @@ open class SDSegmentControl: UIControl {
         
         switch progress {
         case let p where p <= 0:
-            //move back to deafult pos
-            selectSegment(segmentbButton: nil, index: selectedSectionIndex  , shouldSendAction: false, isReselect: true)
+            _currentProgress = 0
             return
         case let p where p >= 1:
             _currentProgress = 1
