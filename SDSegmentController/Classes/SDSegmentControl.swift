@@ -132,7 +132,8 @@ open class SDSegmentControl: UIControl {
     public var lastSelectedSectionIndex :Int = 0
     
     
-    public var sectionMargin:CGFloat = 0
+    // inset applied to left and right of section
+    public var sectionInset:CGFloat = 0
 
     public var numberOfSegments : Int {
         get{
@@ -163,7 +164,7 @@ open class SDSegmentControl: UIControl {
     //MARK: - Initialization
     
    public init(){
-        sectionMargin = 10
+        sectionInset = 10
         _scrollView = UIScrollView()
         _selectionIndicator = UIView()
         
@@ -198,7 +199,7 @@ open class SDSegmentControl: UIControl {
     
     required public init?(coder aDecoder: NSCoder) {
         
-        sectionMargin = 10
+        sectionInset = 10
         _scrollView = UIScrollView()
         _selectionIndicator = UIView()
         
@@ -240,7 +241,7 @@ open class SDSegmentControl: UIControl {
         let count = numberOfSegments
         
         for index in 0...count-1 {
-            let btnWidth = ( segmentWidthStyle == .fixed ?  maxWidth :  widthAt(index: index)) + sectionMargin
+            let btnWidth = ( segmentWidthStyle == .fixed ?  maxWidth :  widthAt(index: index)) + (sectionInset * 2)
             let rect = CGRect(x: x, y: CGFloat(0), width: btnWidth ,height: self.frame.size.height - selectionIndicatorHeight )
             let button = SDButton(frame:rect )
             button.addTarget(self, action: #selector(sectionSlected(button:)), for: UIControlEvents.touchUpInside)
@@ -407,7 +408,7 @@ open class SDSegmentControl: UIControl {
         
         //IF the max width can be increased to fill screen
 //        let calcMaxScrWidth = (self.frame.size.width - (CGFloat(numberOfSegments+1) * sectionMargin))/CGFloat( numberOfSegments)
-        let calcMaxScrWidth = (self.frame.size.width - (CGFloat(numberOfSegments) * sectionMargin))/CGFloat( numberOfSegments)
+        let calcMaxScrWidth = (self.frame.size.width - (CGFloat(numberOfSegments) * (sectionInset*2)))/CGFloat( numberOfSegments)
         maxWidth =  calcMaxScrWidth > maxWidth ? calcMaxScrWidth : maxWidth
         
         return maxWidth

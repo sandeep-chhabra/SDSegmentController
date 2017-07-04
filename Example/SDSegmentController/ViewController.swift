@@ -16,9 +16,9 @@ class ViewController: UIViewController,SDSegmentControllerDataSource {
         // Do any additional setup after loading the view, typically from a nib.
         
         let segmentVc = //SDSegmentController.init(sectionTitles: ["INBOX","music","Books","images","library"])
-            SDSegmentController.init(sectionImages: [#imageLiteral(resourceName: "music"),#imageLiteral(resourceName: "home"),#imageLiteral(resourceName: "book"),#imageLiteral(resourceName: "books")], selectedSectionImages: [#imageLiteral(resourceName: "musicSelected"),#imageLiteral(resourceName: "homeSelected"),#imageLiteral(resourceName: "bookSelected"),#imageLiteral(resourceName: "booksSelected")], sectionTitles: ["Title 1","Title 2","Title 3","Title 4"] )
+            SDSegmentController.init(sectionImages: [#imageLiteral(resourceName: "music"),#imageLiteral(resourceName: "home"),#imageLiteral(resourceName: "book"),#imageLiteral(resourceName: "books")], selectedSectionImages: [#imageLiteral(resourceName: "musicSelected"),#imageLiteral(resourceName: "homeSelected"),#imageLiteral(resourceName: "bookSelected"),#imageLiteral(resourceName: "booksSelected")], sectionTitles: ["Title 1","Title 2aaa","Title 3aaaaa","Title 4sssssssss"] )
         
-        segmentVc.segmentControl.sectionMargin = 50
+        segmentVc.segmentControl.sectionInset = 25
         
         segmentVc.view.frame = self.view.bounds
         segmentVc.segmentHeight = 80
