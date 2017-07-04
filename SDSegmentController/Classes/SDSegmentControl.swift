@@ -580,19 +580,19 @@ open class SDSegmentControl: UIControl {
 
         switch (direction , segmentWidthStyle) {
         case (.forward , .fixed):
-            x = currentFrame.origin.x + ((currentFrame.size.width + sectionMargin) * _currentProgress)
+            x = currentFrame.origin.x + ((currentFrame.size.width ) * _currentProgress)
             width = nxtFrame.size.width
            break
         case (.forward , .dynamic):
-            x = currentFrame.origin.x + ((currentFrame.size.width + sectionMargin) * _currentProgress)
+            x = currentFrame.origin.x + ((currentFrame.size.width ) * _currentProgress)
             width = currentFrame.size.width + (nxtFrame.size.width - currentFrame.size.width) * _currentProgress
             break
         case (.backward , .fixed):
-            x = currentFrame.origin.x - ((currentFrame.size.width + sectionMargin) * _currentProgress)
+            x = currentFrame.origin.x - ((currentFrame.size.width ) * _currentProgress)
             width = nxtFrame.size.width
             break
         case (.backward , .dynamic):
-            x = currentFrame.origin.x - ((nxtFrame.size.width + sectionMargin) * _currentProgress)
+            x = currentFrame.origin.x - ((nxtFrame.size.width ) * _currentProgress)
             width = currentFrame.size.width + (nxtFrame.size.width - currentFrame.size.width) * _currentProgress
             break
       
