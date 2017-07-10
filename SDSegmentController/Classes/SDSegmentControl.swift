@@ -455,7 +455,20 @@ open class SDSegmentControl: UIControl {
         
     }
     
-  private  func selectSegment(segmentbButton:UIButton?,index:Int? , shouldSendAction:Bool, isReselect:Bool){
+    private  func selectSegment(segmentbButton:UIButton?,index:Int? , shouldSendAction:Bool, isReselect:Bool){
+        
+        
+        switch (index , segmentbButton) {
+        case let (x,y) where x == nil && y == nil:
+            return
+        case ( let x , _) where x != nil :
+            if x! > numberOfSegments - 1 || x! < 0 {
+                return
+            }
+        default:
+            break
+        }
+        
         
         let currentSelectionView = segmentbButton != nil ? segmentbButton : (_scrollView.viewWithTag(index! + 999) as! UIButton)
         let currentSectionIndex = (currentSelectionView?.tag)! - 999
@@ -469,32 +482,33 @@ open class SDSegmentControl: UIControl {
             lastSelectedSectionIndex = self.selectedSectionIndex
             self.selectedSectionIndex = currentSectionIndex
         }
-       
+        
         //delegate method called always even when user selects segment
         self.delegate?.segmentControl(segmentControl: self, willSelectSegmentAt: currentSectionIndex)
         if shouldSendAction {
             self.sendActions(for: .valueChanged)
         }
-    
+        
         _selectionIndicator.layer.removeAllAnimations()
-    
+        
         _scrollView.scrollRectToVisible((currentSelectionView?.frame)!, animated: true)
         UIView.animate(withDuration: 0.2, animations: {
             
-                let newPosition = CGRect(x: (currentSelectionView?.frame.origin.x)!, y: self._selectionIndicator.frame.origin.y, width: (currentSelectionView?.frame.size.width)!, height: self.selectionIndicatorHeight)
+            let newPosition = CGRect(x: (currentSelectionView?.frame.origin.x)!, y: self._selectionIndicator.frame.origin.y, width: (currentSelectionView?.frame.size.width)!, height: self.selectionIndicatorHeight)
             
-                self._selectionIndicator.frame = newPosition
-            })
-            { (completed) in
-                    if isReselect == false{
-                        currentSelectionView?.isSelected = true
-                        let lastSelectedView = self._scrollView.viewWithTag(self.lastSelectedSectionIndex+999) as! UIButton
-                        lastSelectedView.isSelected = false
-                    }
-                //delegate method called always even when user selects segment
-                self.delegate?.segmentControl(segmentControl: self, didSelectSegmentAt: currentSectionIndex)
+            self._selectionIndicator.frame = newPosition
+        })
+        { (completed) in
+            if isReselect == false{
+                currentSelectionView?.isSelected = true
+                let lastSelectedView = self._scrollView.viewWithTag(self.lastSelectedSectionIndex+999) as! UIButton
+                lastSelectedView.isSelected = false
             }
+            //delegate method called always even when user selects segment
+            self.delegate?.segmentControl(segmentControl: self, didSelectSegmentAt: currentSectionIndex)
+        }
     }
+    
   //MARK: - Refresh
  open   func refreshSegemts() {
 //        self.setNeedsDisplay()
