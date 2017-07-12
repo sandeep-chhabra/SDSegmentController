@@ -335,7 +335,7 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
 
     }
     
-
+//MARK: setViewControllers with page index as user can select any page directly so startPage can not be calculated
     func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewControllerNavigationDirection, animated: Bool, pageIndex:Int, completion: ((Bool) -> Void)? = nil) {
 //        print("setViewControllers : start page : \(pageIndex)")
         isSegemntSelected = true
