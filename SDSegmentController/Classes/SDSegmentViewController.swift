@@ -95,11 +95,17 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
 //    }
 
     func segmentDidBeginDragging(progress: CGFloat, direction: SDMoveDirection) {
-         segmentControl.setProgressToNextSegment(progress: abs(progress) , direction: direction)
+        segmentControl.setProgressToNextSegment(progress: abs(progress) , direction: direction)
     }
     
     func segmentDidEndDragging(selectedPage: Int) {
-        self.segmentControl.selectSegment(segmentbButton: nil, index: selectedPage - 1)
+        
+        
+//        print("segmentDidEndDragging : page : \(selectedPage)")
+//            self.segmentControl.endMoveToNextSegment()
+            //giving wrong page sometime
+            self.segmentControl.selectSegment(segmentbButton: nil, index: selectedPage - 1) 
+
     }
     
     
@@ -175,7 +181,8 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
         let dir : UIPageViewControllerNavigationDirection = segmentControl.moveDirection == .forward ? .forward : .reverse
        
         let vc = self.getViewControllerAt(segmentIndex: segmentControl.selectedSectionIndex)
-            _pageController.setViewControllers([vc], direction: dir, animated: true) { (completed) in
+        
+        _pageController.setViewControllers([vc], direction: dir, animated: true , pageIndex: segmentControl.selectedSectionIndex + 1) { (completed) in
                 //last selected
 //                self._lastSelectedSegmentIndex = self.segmentControl.selectedSectionIndex
             }
@@ -219,6 +226,8 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
     
     var scrollDelegate:SDSegmentPageViewControllerDelegate?
 
+    var isSegemntSelected = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -262,7 +271,8 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
         //content offset x changes from pagewidth to 0 in case of backward
         //Then reset
         
-        if ignore {
+
+        if ignore || isSegemntSelected {
             return
         }
         
@@ -303,6 +313,10 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 //        print("scrollViewDidEndDecelerating")
+        if isSegemntSelected {
+            return
+        }
+        
         ignore = false
         
         let pageWidth : CGFloat = scrollView.frame.size.width;
@@ -322,7 +336,17 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
     }
     
 
-
+    func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewControllerNavigationDirection, animated: Bool, pageIndex:Int, completion: ((Bool) -> Void)? = nil) {
+//        print("setViewControllers : start page : \(pageIndex)")
+        isSegemntSelected = true
+        startPage = pageIndex
+        setViewControllers(viewControllers, direction: direction, animated: animated) { (complete) in
+            completion
+            self.isSegemntSelected = false
+        }
+    }
+    
+    
     
     func getScrollView(mainView:UIView) -> UIScrollView! {
         for view in mainView.subviews {

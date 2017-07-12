@@ -530,7 +530,7 @@ open class SDSegmentControl: UIControl {
         case (numberOfSegments - 1,.forward):
             return
         default:
-            print("Default case endMoveToNextSegment \(selectedSectionIndex), \(_currentDirection), \(_currentProgress)")
+//            print("Default case endMoveToNextSegment \(selectedSectionIndex), \(_currentDirection), \(_currentProgress)")
             break
         }
         
