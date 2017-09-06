@@ -25,12 +25,13 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
     public var delegate: SDSegmentControllerDelegate?
 
     
-   public var  segmentControl : SDSegmentControl!
-   public var segmentHeight : CGFloat = 50
+    public var  segmentControl : SDSegmentControl!
+    public var  segmentHeight  : CGFloat = 50
+    
+    public var animatesSegmentTap = true
     
     private  let _pageController:SDSegmentPageViewController = SDSegmentPageViewController.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     
-//    private var _lastSelectedSegmentIndex = 0
     
     public init(){
         segmentControl = SDSegmentControl()
@@ -156,6 +157,7 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
     
     
 //MARK: - Add segments
+    //Use dispatch async if using auto layout
    open func addSegments() {
    
         //Add segment control
@@ -172,25 +174,29 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
         
         let vc = self.getViewControllerAt(segmentIndex: segmentControl.selectedSectionIndex)
             _pageController.setViewControllers([vc], direction: .forward, animated: true) { (completed) in
-                //last selected
-//                self._lastSelectedSegmentIndex = self.segmentControl.selectedSectionIndex
             }
     }
 
     
-//MARK : - SEGMENT CONTROL
+//MARK: - SEGMENT CONTROL
     func segmentControlValueChanged(segment:SDSegmentControl)  {
         let dir : UIPageViewControllerNavigationDirection = segmentControl.moveDirection == .forward ? .forward : .reverse
        
         let vc = self.getViewControllerAt(segmentIndex: segmentControl.selectedSectionIndex)
-        
-        _pageController.setViewControllers([vc], direction: dir, animated: true , pageIndex: segmentControl.selectedSectionIndex + 1) { (completed) in
-                //last selected
-//                self._lastSelectedSegmentIndex = self.segmentControl.selectedSectionIndex
-            }
-        
+        _pageController.setViewControllers([vc], direction: dir, animated: animatesSegmentTap , pageIndex: segmentControl.selectedSectionIndex + 1) { (completed) in
+        }
         
     }
+    
+    open func clearCache(){
+        
+        let dir : UIPageViewControllerNavigationDirection = segmentControl.moveDirection == .forward ? .forward : .reverse
+        
+        let vc = self.getViewControllerAt(segmentIndex: segmentControl.selectedSectionIndex)
+        _pageController.setViewControllers([vc], direction: dir, animated: false , pageIndex: segmentControl.selectedSectionIndex + 1) { (completed) in
+        }
+    }
+    
 //MARK : - SDSegmentControlDelegate
     public func segmentControl(segmentControl: SDSegmentControl, didSelectSegmentAt index: Int) {
         delegate?.segmentController(segmentController: self, didSelectSegmentAt: index)

@@ -132,7 +132,7 @@ open class SDSegmentControl: UIControl {
     public var lastSelectedSectionIndex :Int = 0
     
     
-    // inset applied to left and right of section
+    // inset applied to left and right of section each
     public var sectionInset:CGFloat = 0
 
     public var numberOfSegments : Int {

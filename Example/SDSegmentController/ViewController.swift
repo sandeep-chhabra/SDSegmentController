@@ -18,18 +18,24 @@ class ViewController: UIViewController,SDSegmentControllerDataSource {
         let segmentVc = //SDSegmentController.init(sectionTitles: ["INBOX","music","Books","images","library"])
             SDSegmentController.init(sectionImages: [#imageLiteral(resourceName: "music"),#imageLiteral(resourceName: "home"),#imageLiteral(resourceName: "book"),#imageLiteral(resourceName: "books")], selectedSectionImages: [#imageLiteral(resourceName: "musicSelected"),#imageLiteral(resourceName: "homeSelected"),#imageLiteral(resourceName: "bookSelected"),#imageLiteral(resourceName: "booksSelected")], sectionTitles: ["Title 1","Title 2aaa","Title 3aaaaa","Title 4sssssssss"] )
         
-        segmentVc.segmentControl.sectionInset = 25
-        
+        segmentVc.segmentControl.sectionInset = 10
+
         segmentVc.view.frame = self.view.bounds
         segmentVc.segmentHeight = 80
-        segmentVc.segmentControl.segmentWidthStyle = .dynamic
+        segmentVc.segmentControl.segmentWidthStyle = .fixed
+        
+        segmentVc.segmentControl.selectedSectionIndex  = 3
+
         self.addChildViewController(segmentVc)
         self.view.addSubview(segmentVc.view)
         
         segmentVc.dataSource = self
+        
+        //Use dispatch async if using auto layout
         segmentVc.addSegments()
         
         
+        // Customize segment views
         if let vu = segmentVc.viewAt(segmentIndex:0)
         {
             let x = vu.frame.size.width  - (20)
@@ -47,6 +53,11 @@ class ViewController: UIViewController,SDSegmentControllerDataSource {
             countLabel.textAlignment = .center
         }
         
+       
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            //Clears all view controllers in cache now viewControllerAt(segmentIndex: Int) will be called again on scrolling
+            segmentVc.clearCache()
+        }
     }
     
     override func didReceiveMemoryWarning() {
