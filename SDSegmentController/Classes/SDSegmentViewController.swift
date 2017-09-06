@@ -163,6 +163,8 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
         self.view.addSubview(segmentControl)
         segmentControl.drawSegments()
     
+        _pageController.startPage = segmentControl.selectedSectionIndex + 1
+
         //add pageController
         _pageController.view.frame = CGRect(x: 0, y: segmentHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - segmentHeight)
         self.addChildViewController(_pageController)
