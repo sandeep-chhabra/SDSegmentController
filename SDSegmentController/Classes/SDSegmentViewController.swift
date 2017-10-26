@@ -158,23 +158,34 @@ open class SDSegmentController: UIViewController ,SDSegmentPageViewControllerDel
     
 //MARK: - Add segments
     //Use dispatch async if using auto layout
-   open func addSegments() {
-   
+    open func addSegments() {
+        
+        //setting the delegate to nil when a diff vc far from current is selected - as scrollviewdidscroll method is also called for setViewControllers animated which leads to wrong position of selection indicator on segment control
+        if _pageController.startPage != segmentControl.selectedSectionIndex + 1 {
+            _pageController.scrollDelegate = nil
+        }
+        
         //Add segment control
         segmentControl.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: segmentHeight)
         self.view.addSubview(segmentControl)
         segmentControl.drawSegments()
-    
-        _pageController.startPage = segmentControl.selectedSectionIndex + 1
-
+        
+        let dir:UIPageViewControllerNavigationDirection  = _pageController.startPage < segmentControl.selectedSectionIndex+1 ? .forward : .reverse
+        
+        
         //add pageController
+        _pageController.startPage = segmentControl.selectedSectionIndex + 1
         _pageController.view.frame = CGRect(x: 0, y: segmentHeight, width: self.view.frame.size.width, height: self.view.frame.size.height - segmentHeight)
         self.addChildViewController(_pageController)
         self.view.addSubview(_pageController.view)
         
         let vc = self.getViewControllerAt(segmentIndex: segmentControl.selectedSectionIndex)
-            _pageController.setViewControllers([vc], direction: .forward, animated: true) { (completed) in
-            }
+        
+        _pageController.setViewControllers([vc], direction: dir, animated: true) { (completed) in
+            //Animation completion only called when a diffrent vc than current is selected ie. only when animation actually happens
+            self._pageController.scrollDelegate = self
+        }
+        
     }
 
     
@@ -318,6 +329,10 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
     }
     
    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        //when set view controller is called then scrollViewDidEndDecelerating method is not called
+        ignore = false
+    }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 //        print("scrollViewDidEndDecelerating")
@@ -344,6 +359,7 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
     }
     
 //MARK: setViewControllers with page index as user can select any page directly so startPage can not be calculated
+ //TODO: Use may be spine location to make this work with multiple vc in array which is currently assumed to contain single element so that CACHE will not be cleared everytime
     func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewControllerNavigationDirection, animated: Bool, pageIndex:Int, completion: @escaping ((Bool) -> Void)) {
 //        print("setViewControllers : start page : \(pageIndex)")
         isSegemntSelected = true
