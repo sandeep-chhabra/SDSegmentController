@@ -292,7 +292,7 @@ class SDSegmentPageViewController: UIPageViewController, UIGestureRecognizerDele
 
         let dir:SDMoveDirection = fractionalPage >= 1 ? .forward : .backward
 
-        if progress == 1{
+        if progress >= 1{
             ignore = true
         }
         
